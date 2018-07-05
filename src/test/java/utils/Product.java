@@ -1,4 +1,4 @@
-package common;
+package utils;
 
 public class Product {
     public String name;

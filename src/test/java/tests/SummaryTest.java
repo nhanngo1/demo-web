@@ -1,7 +1,7 @@
-package testscrips;
+package tests;
 
-import common.Product;
-import common.Utility;
+import utils.Product;
+import utils.Utility;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.*;

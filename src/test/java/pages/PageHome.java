@@ -1,7 +1,7 @@
 package pages;
 
-import common.Product;
-import common.Utility;
+import utils.Product;
+import utils.Utility;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
