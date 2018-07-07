@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -29,5 +30,12 @@ public class PageSummary extends PageBase{
         String totalProdPrice = totalProductPrice.getText();
         totalProdPrice = totalProdPrice.substring(1);
         return Double.parseDouble(totalProdPrice);
+    }
+
+    @Override
+    public void clickProceedToCheckout(WebDriver driver) {
+        try {Thread.sleep(500); } catch (Exception ex) {};
+        super.scrollToElement(driver, this.proceedToCheckout);
+        this.proceedToCheckout.click();
     }
 }

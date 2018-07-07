@@ -1,6 +1,5 @@
 package pages;
 
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -16,11 +15,11 @@ public class PageMyAccount extends PageBase{
     public PageMyAccount(WebDriver driver){
         this.driver = driver;
         PageFactory.initElements(driver, this);
-        super.waitForVisibilityOfElement(driver, this.PageName);
+        super.waitForVisibilityOfElement(driver, this.lblPageName);
     }
 
-    public String getPageName(){
-        return PageName.getText();
+    public String getLblPageName(){
+        return lblPageName.getText();
     }
 
     public PageHome clickHomeIcon(){
