@@ -6,7 +6,8 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.*;
 
-public class SummaryTest extends TestBase{
+//public class SummaryTest extends TestBase{
+public class SummaryTest extends TestBaseGrid{
 
     @BeforeMethod
     public void testMethodInit(){
