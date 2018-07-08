@@ -1,13 +1,12 @@
 package tests;
 
-import utils.Product;
-import utils.Utility;
+import model.Cart;
+import model.Product;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.*;
 
-//public class SummaryTest extends TestBase{
-public class SummaryTest extends TestBase {
+public class SummaryTest extends TestBase{
 
     @BeforeMethod
     public void testMethodInit(){
@@ -23,14 +22,15 @@ public class SummaryTest extends TestBase {
         PageLogin pageLogin = pageHome.ClickSignInButton();
 
         PageMyAccount pageMyAccount = pageLogin.signIn(email, pwd);
-        System.out.println(pageMyAccount.getPageName());
+        System.out.println(pageMyAccount.getLblPageName());
 
-        Assert.assertEquals(pageMyAccount.getPageName(),"My Account");
+        Assert.assertEquals(pageMyAccount.getLblPageName(),"My Account");
     }
 
     @Test
     public void testSummanyInfo(){
 
+        Cart cart = new Cart();
         String email = "autotest@clearstep.33mail.com";
         String pwd = "P@ssword123";
 
@@ -40,13 +40,13 @@ public class SummaryTest extends TestBase {
         PageMyAccount pageMyAccount = pageLogin.signIn(email, pwd);
         pageHome = pageMyAccount.clickHomeIcon();
 
-        pageHome.addARandomProductToCart();
+        pageHome.addARandomProductToCart(cart);
         pageHome.selectContinueShopping();
-        pageHome.addARandomProductToCart();
+        pageHome.addARandomProductToCart(cart);
         PageSummary pageSummary = pageHome.selectProceedToCheckOut();
 
         double expectedPrice = 0;
-        for (Product prod : Utility.Cart) {
+        for (Product prod : cart.products) {
             expectedPrice += prod.price * prod.quantity;
             System.out.println(prod.toString());
         }
@@ -56,8 +56,19 @@ public class SummaryTest extends TestBase {
         double actualPrice = pageSummary.getTotalProductPrice();
         Assert.assertEquals(actualPrice, expectedPrice);
 
-        pageSummary.scrollToElement(driver, pageSummary.proceedToCheckout);
-        pageSummary.proceedToCheckout.click();
+        pageSummary.clickProceedToCheckout(driver);
+
+        System.out.println("navigating to page address");
+        PageAddress pageAddress = new PageAddress(driver);
+        pageAddress.checkToUseDeliveryAddressAsBillingAddress();
+        pageAddress.clickProceedToCheckout(driver);
+
+        PageShipping pageShipping = new PageShipping(driver);
+        pageShipping.checkToAgreeTermsAndCondition();
+        pageShipping.clickProceedToCheckout(driver);
+
+        PagePayment pagePayment = new PagePayment(driver);
+        pagePayment.verifyCartSummary(cart);
     }
 
     @AfterMethod

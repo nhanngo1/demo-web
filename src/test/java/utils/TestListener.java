@@ -19,11 +19,12 @@ public class TestListener implements ITestListener {
 
     public void onStart(ITestContext iTestContext) {
         System.out.println("Start tests");
-        if (TestReport.extentTest == null) {
+
+        // create html report
+        if (utils.TestReport.extentTest == null) {
             String workingDir = System.getProperty("user.dir");
-            System.out.println("workingDir: " + workingDir);
-            extentReports = new ExtentReports(workingDir + "/report/AutomationTestReport.html", true, NetworkMode.ONLINE);
-            //extentReports.loadConfig(new File("report-config.xml"));
+            System.out.println("workingDir" + workingDir);
+            extentReports = new ExtentReports(workingDir + "/report/AutomationTestReport.html", true, NetworkMode.OFFLINE);
         }
     }
 

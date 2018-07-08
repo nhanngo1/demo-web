@@ -9,13 +9,13 @@ public class PageLogin extends PageBase{
     private WebDriver driver;
 
     @FindBy (id = "email")
-    WebElement email;
+    WebElement txtEmail;
 
     @FindBy (id = "passwd")
-    WebElement password;
+    WebElement txtPassword;
 
     @FindBy (id = "SubmitLogin")
-    private WebElement signInButon;
+    private WebElement btnSignIn;
 
     public PageLogin(WebDriver driver) {
         this.driver = driver;
@@ -24,11 +24,11 @@ public class PageLogin extends PageBase{
 
     public PageMyAccount signIn(String email, String pwd){
 
-        super.waitForVisibilityOfElement(driver, this.email);
+        super.waitForVisibilityOfElement(driver, this.txtEmail);
 
-        this.email.sendKeys(email);
-        password.sendKeys(pwd);
-        signInButon.click();
+        this.txtEmail.sendKeys(email);
+        txtPassword.sendKeys(pwd);
+        btnSignIn.click();
 
         return new PageMyAccount(driver);
     }
