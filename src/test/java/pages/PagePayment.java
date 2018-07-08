@@ -40,18 +40,19 @@ public class PagePayment extends PageBase{
         System.out.println(CollectionUtils.isEqualCollection(actualSelectedProduct, cart.products));
 
         // TODO
-//        int result = 1;
-//        int actualSelectedProductSize = actualSelectedProduct.size();
-//        int expectedSelectedProductSize = cart.products.size();
-//        String log = "";
-//
-//        if (actualSelectedProductSize != expectedSelectedProductSize) {
-//            log = String.format("Expected: %d products bought.<br>Actual: %d products bought", actualSelectedProduct.size(), cart.products.size());
-//            testReport(driver, , log, true);
-//        }
-//
-//        for (int i = 0; i < totalProduct; i++) {
-//        }
+        int result = 1;
+        int actualSelectedProductSize = actualSelectedProduct.size();
+        int expectedSelectedProductSize = cart.products.size();
+        String log = "testests";
+
+        testReport(driver, false, log, true);
+        if (actualSelectedProductSize != expectedSelectedProductSize) {
+            log = String.format("Expected: %d products bought.<br>Actual: %d products bought", actualSelectedProduct.size(), cart.products.size());
+            testReport(driver, false, log, true);
+        }
+
+        for (int i = 0; i < totalProduct; i++) {
+        }
     }
 
 
