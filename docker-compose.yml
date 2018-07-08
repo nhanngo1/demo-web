@@ -1,0 +1,26 @@
+version: "3"
+services:
+    test:
+        container_name: e2e-test
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        links:
+            - chrome
+        env_file:
+            - .env
+        volumes:
+            - ".:/usr/local/app"
+    selenium-hub:
+        image: selenium/hub:3.12.0-cobalt
+        container_name: selenium-hub
+        ports:
+            - "4444:4444"
+    chrome:
+        image: selenium/node-chrome:3.12.0-cobalt
+        links:
+            - selenium-hub
+        env_file:
+            - .env
+        volumes:
+            - "/dev/shm:/dev/shm"

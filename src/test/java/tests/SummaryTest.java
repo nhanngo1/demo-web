@@ -6,9 +6,6 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SummaryTest extends TestBase{
 
     @BeforeMethod
@@ -51,7 +48,6 @@ public class SummaryTest extends TestBase{
         double expectedPrice = 0;
         for (Product prod : cart.products) {
             expectedPrice += prod.price * prod.quantity;
-
             System.out.println(prod.toString());
         }
         expectedPrice = Math.round(expectedPrice * 100);

@@ -6,6 +6,9 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
+import java.io.File;
+
+
 public class TestListener implements ITestListener {
     private static ExtentReports extentReports;
 
@@ -28,12 +31,12 @@ public class TestListener implements ITestListener {
 
     public void onTestStart(ITestResult iTestResult) {
         System.out.println("Start test method: " + iTestResult.getName());
-        utils.TestReport.extentTest = extentReports.startTest(iTestResult.getName());
+        TestReport.extentTest = extentReports.startTest(iTestResult.getName());
     }
 
     public void onFinish(ITestContext iTestContext) {
         System.out.println("Finish test");
-        extentReports.endTest(utils.TestReport.extentTest);
+        extentReports.endTest(TestReport.extentTest);
         extentReports.flush();
     }
 
