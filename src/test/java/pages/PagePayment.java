@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.apache.commons.collections4.CollectionUtils;
-
+import static utils.TestReport.testReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class PagePayment extends PageBase{
     }
 
 
-    public void verifyCartSummary(Cart cart){
+    public void verifyCartSummary(Cart cart) {
         int totalProduct = 0;
         List<Product> actualSelectedProduct = new ArrayList<Product>();
 
@@ -32,12 +32,26 @@ public class PagePayment extends PageBase{
         List<WebElement> selectedProductRows = cartSummary.findElements(By.cssSelector("tr"));
         totalProduct = selectedProductRows.size();
 
-        for(int i = 0; i< totalProduct; i++) {
+        for (int i = 0; i < totalProduct; i++) {
             actualSelectedProduct.add(getSelectedProduct(selectedProductRows.get(i)));
         }
         System.out.println(actualSelectedProduct.toString());
         System.out.println(cart.products.toString());
         System.out.println(CollectionUtils.isEqualCollection(actualSelectedProduct, cart.products));
+
+        // TODO
+//        int result = 1;
+//        int actualSelectedProductSize = actualSelectedProduct.size();
+//        int expectedSelectedProductSize = cart.products.size();
+//        String log = "";
+//
+//        if (actualSelectedProductSize != expectedSelectedProductSize) {
+//            log = String.format("Expected: %d products bought.<br>Actual: %d products bought", actualSelectedProduct.size(), cart.products.size());
+//            testReport(driver, , log, true);
+//        }
+//
+//        for (int i = 0; i < totalProduct; i++) {
+//        }
     }
 
 

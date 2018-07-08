@@ -16,14 +16,14 @@ public class TestBase {
 
     public void launchBrowser()  {
 
-//        driver = new ChromeDriver();
-//        System.out.println("open site: " + new Date());
-//        driver.get("http://automationpractice.com/");
-        try {
-            DesiredCapabilities dc = DesiredCapabilities.chrome();
-            driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), dc);
-            driver.get("http://automationpractice.com/");
-        } catch (Exception ex){}
+        driver = new ChromeDriver();
+        System.out.println("open site: " + new Date());
+        driver.get("http://automationpractice.com/");
+//        try {
+//            DesiredCapabilities dc = DesiredCapabilities.chrome();
+//            driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), dc);
+//            driver.get("http://automationpractice.com/");
+//        } catch (Exception ex){}
     }
 
 

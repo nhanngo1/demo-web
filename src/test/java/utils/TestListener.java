@@ -6,9 +6,6 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-import java.io.File;
-
-
 public class TestListener implements ITestListener {
     private static ExtentReports extentReports;
 
@@ -19,23 +16,24 @@ public class TestListener implements ITestListener {
 
     public void onStart(ITestContext iTestContext) {
         System.out.println("Start tests");
-        if (TestReport.extentTest == null) {
+
+        // create html report
+        if (utils.TestReport.extentTest == null) {
             String workingDir = System.getProperty("user.dir");
-            System.out.println("workingDir: " + workingDir);
-            extentReports = new ExtentReports(workingDir + "/report/AutomationTestReport.html", true, NetworkMode.ONLINE);
-            extentReports.loadConfig(new File("report-config.xml"));
+            System.out.println("workingDir" + workingDir);
+            extentReports = new ExtentReports(workingDir + "/report/AutomationTestReport.html", true, NetworkMode.OFFLINE);
         }
     }
 
 
     public void onTestStart(ITestResult iTestResult) {
         System.out.println("Start test method: " + iTestResult.getName());
-        TestReport.extentTest = extentReports.startTest(iTestResult.getName());
+        utils.TestReport.extentTest = extentReports.startTest(iTestResult.getName());
     }
 
     public void onFinish(ITestContext iTestContext) {
         System.out.println("Finish test");
-        extentReports.endTest(TestReport.extentTest);
+        extentReports.endTest(utils.TestReport.extentTest);
         extentReports.flush();
     }
 
