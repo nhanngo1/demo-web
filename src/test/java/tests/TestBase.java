@@ -24,7 +24,7 @@ public class TestBase {
         } else {
             try {
                 DesiredCapabilities chromeCapabilities = DesiredCapabilities.chrome();
-                driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), chromeCapabilities);
+                driver = new RemoteWebDriver(new URL("http://0.0.0.0:4444/wd/hub"), chromeCapabilities);
             } catch (Exception ex) {
             }
         }
