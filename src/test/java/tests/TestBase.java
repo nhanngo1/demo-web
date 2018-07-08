@@ -17,7 +17,7 @@ public class TestBase {
         Dotenv dotenv = Dotenv.configure().directory("./").load();
         String RUN_VIA_REMOTE_DRIVER = dotenv.get("RUN_VIA_REMOTE_DRIVER");
 
-        if(RUN_VIA_REMOTE_DRIVER.toUpperCase().equals("YES") == false) {
+        if(RUN_VIA_REMOTE_DRIVER.toUpperCase().equals("true") == false) {
             driver = new ChromeDriver();
         } else {
             try {
