@@ -7,7 +7,7 @@ import org.testng.annotations.*;
 import pages.*;
 
 //public class SummaryTest extends TestBase{
-public class SummaryTest extends TestBaseGrid{
+public class SummaryTest extends TestBase {
 
     @BeforeMethod
     public void testMethodInit(){
