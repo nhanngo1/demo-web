@@ -27,8 +27,8 @@ public class PageLogin extends PageBase{
         super.waitForVisibilityOfElement(driver, this.txtEmail);
 
         this.txtEmail.sendKeys(email);
-        txtPassword.sendKeys(pwd);
-        btnSignIn.click();
+        this.txtPassword.sendKeys(pwd);
+        this.btnSignIn.click();
 
         return new PageMyAccount(driver);
     }

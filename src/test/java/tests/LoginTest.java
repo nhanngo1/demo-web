@@ -12,6 +12,9 @@ import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import pages.PageHome;
+import pages.PageLogin;
+import pages.PageMyAccount;
 
 public class LoginTest {
 
@@ -19,7 +22,7 @@ public class LoginTest {
 
 
     @Test
-    public void LoginSuccessfully(){
+    public void loginSuccessfully(){
 
         Dotenv dotenv = Dotenv.configure().directory("./").load();
 
@@ -40,6 +43,7 @@ public class LoginTest {
         String userName = driver.findElement(By.cssSelector("a.account")).getText();
         Assert.assertEquals(userName, accountName);
     }
+
 }
 
 

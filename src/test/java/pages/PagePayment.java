@@ -16,14 +16,39 @@ import java.util.List;
 
 public class PagePayment extends PageBase {
     private WebDriver driver;
+
     @FindBy(id = "cart_summary")
     WebElement tblCartSummary;
+
+    @FindBy(css = "a.bankwire")
+    WebElement btnPayByBankWire;
+
+    @FindBy(css = "a.cheque")
+    WebElement btnPayByCheck;
+
+    @FindBy(id = "amount")
+    WebElement lblAmount;
 
     public PagePayment(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
+    public PagePayment selectPayByCheck(){
+        btnPayByCheck.click();
+        return this;
+    }
+
+    public int verifyAmount(double expectedAmount){
+        double actualAmount  = Double.parseDouble(lblAmount.getText().replace("$", "").trim());
+        String log = String.format("Expect: amount is %02f.<br>Actual: amount is %02f");
+        boolean result = actualAmount == expectedAmount;
+        testReport(driver, result, log, true);
+
+        if(result == true)
+            return 1;
+        return 0;
+    }
 
     public int verifyCartSummary(Cart cart) {
         int totalProduct = 0;
@@ -31,8 +56,8 @@ public class PagePayment extends PageBase {
 
         WebElement cartSummary = tblCartSummary.findElement(By.cssSelector("tbody"));
         List<WebElement> selectedProductRows = cartSummary.findElements(By.cssSelector("tr"));
-        totalProduct = selectedProductRows.size();
-        
+        //totalProduct = selectedProductRows.size();
+
         this.scrollToElement(driver, tblCartSummary);
         actualSelectedProduct = getSelectedProducts();
 //        for (int i = 0; i < totalProduct; i++) {
@@ -53,26 +78,29 @@ public class PagePayment extends PageBase {
 //            testReport(driver, false, log, true);
 //            return 0;
 //        } else {
-            int count = 0;
-            for (int i = 0; i < totalProduct; i++) {
-                boolean stepResult = (actualSelectedProduct.get(i).name.equals(cart.products.get(i).name) &&
-                        actualSelectedProduct.get(i).size.equals(cart.products.get(i).size) &&
-                        actualSelectedProduct.get(i).color.equals(cart.products.get(i).color) &&
-                        actualSelectedProduct.get(i).quantity == cart.products.get(i).quantity &&
-                        actualSelectedProduct.get(i).price == cart.products.get(i).price &&
-                        actualSelectedProduct.get(i).oldPrice == cart.products.get(i).oldPrice &&
-                        actualSelectedProduct.get(i).discountPercent == cart.products.get(i).discountPercent);
-                log += String.format("Expect: %s.<br>Actual: %s.<br><br>", actualSelectedProduct.get(i).toString(), cart.products.get(i).toString());
+        int count = 0;
+        boolean stepResult = true;
+        for (int i = 0; i < expectedSelectedProductSize; i++) {
+            stepResult = (actualSelectedProduct.get(i).name.equals(cart.products.get(i).name) &&
+                    actualSelectedProduct.get(i).size.equals(cart.products.get(i).size) &&
+                    actualSelectedProduct.get(i).color.equals(cart.products.get(i).color) &&
+                    actualSelectedProduct.get(i).quantity == cart.products.get(i).quantity &&
+                    actualSelectedProduct.get(i).price == cart.products.get(i).price &&
+                    actualSelectedProduct.get(i).oldPrice == cart.products.get(i).oldPrice &&
+                    actualSelectedProduct.get(i).discountPercent == cart.products.get(i).discountPercent);
+            log += String.format("Expect: %s.<br>Actual: %s.<br><br>", actualSelectedProduct.get(i).toString(), cart.products.get(i).toString());
 
-                if(stepResult == true)
-                    count ++;
-            }
-            result = count == totalProduct;
-            testReport(driver, result, log, true);
+            if (stepResult == true)
+                count++;
+            System.out.println("count: " + count);
+        }
 
-            if(result == true)
-                return 1;
-            return 0;
+        result = count == expectedSelectedProductSize;
+        testReport(driver, result, log, true);
+
+        if (result == true)
+            return 1;
+        return 0;
         //}
     }
 

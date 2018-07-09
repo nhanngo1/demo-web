@@ -7,6 +7,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -14,6 +17,17 @@ import java.util.Date;
 
 public class TestBase {
     public WebDriver driver;
+
+    @BeforeMethod
+    public void testMethodInit(){
+        this.launchBrowser();
+    }
+
+
+    @AfterTest
+    public void testCleanUp() {
+        //driver.quit();
+    }
 
     public void launchBrowser() {
 

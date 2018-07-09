@@ -5,12 +5,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import static utils.TestReport.testReport;
+
 public class PageMyAccount extends PageBase{
 
     private WebDriver driver;
 
     @FindBy(className = "icon-home")
-    private WebElement homeicon;
+    private WebElement icoHome;
+
+    @FindBy(css = "a.account")
+    private WebElement lblUserName;
 
     public PageMyAccount(WebDriver driver){
         this.driver = driver;
@@ -24,7 +29,19 @@ public class PageMyAccount extends PageBase{
 
     public PageHome clickHomeIcon(){
 
-        this.homeicon.click();
+        this.icoHome.click();
         return new PageHome(this.driver);
+    }
+
+    public int verifyUserName(String expectedName) {
+        String actualName = lblUserName.getText();
+        String log = String.format("Expect: name is \"%s\".<br>Actual: name is \"%s\"", expectedName, actualName);
+
+        boolean result = actualName.equals(expectedName);
+        testReport(driver, result, log, true);
+
+        if (result == true)
+            return 1;
+        return 0;
     }
 }
