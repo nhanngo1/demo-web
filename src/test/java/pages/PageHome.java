@@ -2,7 +2,6 @@ package pages;
 
 import model.Cart;
 import model.Product;
-import utils.Utility;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
