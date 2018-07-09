@@ -54,7 +54,12 @@ public class PlaceOrderTest extends TestBase{
         pageShipping.clickProceedToCheckout(driver);
 
         PagePayment pagePayment = new PagePayment(driver);
-        result *= pagePayment.verifyCartSummary(cart);
+        //result *= pagePayment.verifyCartSummary(cart);
+        double totalPrice = pagePayment.getTotalPrice();
+        pagePayment.selectPayByCheck();
+        result *= pagePayment.verifyAmount(totalPrice);
+        pagePayment.confirmOrder();
+        pagePayment.verifyOrderPalcedSuccess();
 
         Assert.assertEquals(result, 1);
     }

@@ -29,9 +29,28 @@ public class PagePayment extends PageBase {
     @FindBy(id = "amount")
     WebElement lblAmount;
 
+    @FindBy(id = "total_price")
+    WebElement lblTotalPrice;
+
+    @FindBy(css = "#cart_navigation > button > span")
+    WebElement btnConfirmOrder;
+
+    @FindBy(css = "p.alert.alert-success")
+    WebElement lblOrderSuccessMessage;
+
     public PagePayment(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
+    }
+
+    public double getTotalPrice(){
+        return Double.parseDouble(lblTotalPrice.getText().replace("$", "").trim());
+    }
+
+    public PagePayment confirmOrder(){
+        scrollToElement(driver, btnConfirmOrder);
+        btnConfirmOrder.click();
+        return this;
     }
 
     public PagePayment selectPayByCheck(){
@@ -39,9 +58,21 @@ public class PagePayment extends PageBase {
         return this;
     }
 
+    public int verifyOrderPalcedSuccess(){
+
+        String log = String.format("Expect the message ");
+        try {
+            testReport(driver, true, "The message \"Your order on My Store is complete.\" is displayed", true);
+            return 1;
+        } catch (Exception ex){
+            testReport(driver, false, "The message \"Your order on My Store is complete.\" is not displayed", true);
+            return 0;
+        }
+    }
+
     public int verifyAmount(double expectedAmount){
         double actualAmount  = Double.parseDouble(lblAmount.getText().replace("$", "").trim());
-        String log = String.format("Expect: amount is %02f.<br>Actual: amount is %02f");
+        String log = String.format("Expect: amount is %.2f.<br>Actual: amount is .2%f", expectedAmount, actualAmount);
         boolean result = actualAmount == expectedAmount;
         testReport(driver, result, log, true);
 
