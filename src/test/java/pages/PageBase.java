@@ -47,9 +47,9 @@ public abstract class PageBase {
     }
 
     public void scrollToElement(WebDriver driver, WebElement element) {
-        System.out.println("scrolling...");
+        //System.out.println("scrolling...");
 
-        System.out.println("element:" + element);
+        //System.out.println("element:" + element);
 
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
         //try{Thread.sleep(500);}catch (Exception ex){};

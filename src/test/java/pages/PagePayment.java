@@ -8,87 +8,147 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.apache.commons.collections4.CollectionUtils;
+
 import static utils.TestReport.testReport;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PagePayment extends PageBase{
+public class PagePayment extends PageBase {
     private WebDriver driver;
+
     @FindBy(id = "cart_summary")
     WebElement tblCartSummary;
 
-    public PagePayment(WebDriver driver){
+    @FindBy(css = "a.bankwire")
+    WebElement btnPayByBankWire;
+
+    @FindBy(css = "a.cheque")
+    WebElement btnPayByCheck;
+
+    @FindBy(id = "amount")
+    WebElement lblAmount;
+
+    public PagePayment(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
+    public PagePayment selectPayByCheck(){
+        btnPayByCheck.click();
+        return this;
+    }
 
-    public void verifyCartSummary(Cart cart) {
+    public int verifyAmount(double expectedAmount){
+        double actualAmount  = Double.parseDouble(lblAmount.getText().replace("$", "").trim());
+        String log = String.format("Expect: amount is %02f.<br>Actual: amount is %02f");
+        boolean result = actualAmount == expectedAmount;
+        testReport(driver, result, log, true);
+
+        if(result == true)
+            return 1;
+        return 0;
+    }
+
+    public int verifyCartSummary(Cart cart) {
         int totalProduct = 0;
         List<Product> actualSelectedProduct = new ArrayList<Product>();
 
         WebElement cartSummary = tblCartSummary.findElement(By.cssSelector("tbody"));
         List<WebElement> selectedProductRows = cartSummary.findElements(By.cssSelector("tr"));
-        totalProduct = selectedProductRows.size();
+        //totalProduct = selectedProductRows.size();
 
-        for (int i = 0; i < totalProduct; i++) {
-            actualSelectedProduct.add(getSelectedProduct(selectedProductRows.get(i)));
-        }
-        System.out.println(actualSelectedProduct.toString());
-        System.out.println(cart.products.toString());
-        System.out.println(CollectionUtils.isEqualCollection(actualSelectedProduct, cart.products));
+        this.scrollToElement(driver, tblCartSummary);
+        actualSelectedProduct = getSelectedProducts();
+//        for (int i = 0; i < totalProduct; i++) {
+//            actualSelectedProduct.add(getSelectedProduct(selectedProductRows.get(i)));
+//        }
+//        System.out.println(actualSelectedProduct.toString());
+//        System.out.println(cart.products.toString());
+//        System.out.println(CollectionUtils.isEqualCollection(actualSelectedProduct, cart.products));
 
-        // TODO
-        int result = 1;
         int actualSelectedProductSize = actualSelectedProduct.size();
         int expectedSelectedProductSize = cart.products.size();
-        String log = "testests";
 
-        testReport(driver, false, log, true);
-        if (actualSelectedProductSize != expectedSelectedProductSize) {
-            log = String.format("Expected: %d products bought.<br>Actual: %d products bought", actualSelectedProduct.size(), cart.products.size());
-            testReport(driver, false, log, true);
+        String log = "";
+
+        boolean result = actualSelectedProductSize == expectedSelectedProductSize;
+//        if (result == false) {
+//            log = String.format("Expected: %d products are selected.<br>Actual: %d products are selected", actualSelectedProduct.size(), cart.products.size());
+//            testReport(driver, false, log, true);
+//            return 0;
+//        } else {
+        int count = 0;
+        boolean stepResult = true;
+        for (int i = 0; i < expectedSelectedProductSize; i++) {
+            stepResult = (actualSelectedProduct.get(i).name.equals(cart.products.get(i).name) &&
+                    actualSelectedProduct.get(i).size.equals(cart.products.get(i).size) &&
+                    actualSelectedProduct.get(i).color.equals(cart.products.get(i).color) &&
+                    actualSelectedProduct.get(i).quantity == cart.products.get(i).quantity &&
+                    actualSelectedProduct.get(i).price == cart.products.get(i).price &&
+                    actualSelectedProduct.get(i).oldPrice == cart.products.get(i).oldPrice &&
+                    actualSelectedProduct.get(i).discountPercent == cart.products.get(i).discountPercent);
+            log += String.format("Expect: %s.<br>Actual: %s.<br><br>", actualSelectedProduct.get(i).toString(), cart.products.get(i).toString());
+
+            if (stepResult == true)
+                count++;
+            System.out.println("count: " + count);
         }
 
-        for (int i = 0; i < totalProduct; i++) {
-        }
+        result = count == expectedSelectedProductSize;
+        testReport(driver, result, log, true);
+
+        if (result == true)
+            return 1;
+        return 0;
+        //}
     }
 
 
-    private Product getSelectedProduct(WebElement tableRow){
+    private List<Product> getSelectedProducts() {
 
-        WebElement eleName = tableRow.findElement(By.cssSelector(".cart_description .product-name"));
-        WebElement eleAttribute = tableRow.findElement(By.cssSelector(".cart_description small:nth-child(3)"));
-        WebElement eleQuantity = tableRow.findElement(By.cssSelector(".cart_quantity.text-center"));
-        WebElement elePrice;
+        List<Product> actualSelectedProduct = new ArrayList<Product>();
+        WebElement cartSummary = tblCartSummary.findElement(By.cssSelector("tbody"));
+        List<WebElement> selectedProductRows = cartSummary.findElements(By.cssSelector("tr"));
+        int totalProduct = selectedProductRows.size();
 
-        double pOldPrice = 0.00;
-        int pDisountPercent = 0;
-        try{
-            elePrice = tableRow.findElement(By.cssSelector(".cart_unit span.special-price"));
-            WebElement eleDiscountPercent = tableRow.findElement(By.cssSelector(".cart_unit span.price-percent-reduction"));
-            WebElement eleOldPrice = tableRow.findElement(By.cssSelector(".cart_unit span.old-price"));
+        System.out.println("totalProduct: " + totalProduct);
 
-            pDisountPercent = Integer.parseInt(eleDiscountPercent.getText().replace("%", "").trim());
-            pOldPrice = Double.parseDouble(eleOldPrice.getText().replace("$", "").trim());
-            System.out.println("pDisountPercent" + pDisountPercent);
-            System.out.println("pOldPrice" + pOldPrice);
 
-        } catch (Exception ex){
-            System.out.println("pagePayment.getSelectedProduct() Err: " + ex.getMessage());
-            elePrice = tableRow.findElement(By.cssSelector(".cart_unit span.price"));
+        for (int i = 0; i < totalProduct; i++) {
+            WebElement eleName = selectedProductRows.get(i).findElement(By.cssSelector(".cart_description .product-name"));
+            WebElement eleAttribute = selectedProductRows.get(i).findElement(By.cssSelector(".cart_description small:nth-child(3)"));
+            WebElement eleQuantity = selectedProductRows.get(i).findElement(By.cssSelector(".cart_quantity.text-center"));
+            WebElement elePrice;
+
+            double pOldPrice = 0.00;
+            int pDisountPercent = 0;
+            try {
+                elePrice = selectedProductRows.get(i).findElement(By.cssSelector(".cart_unit span.special-price"));
+                WebElement eleDiscountPercent = selectedProductRows.get(i).findElement(By.cssSelector(".cart_unit span.price-percent-reduction"));
+                WebElement eleOldPrice = selectedProductRows.get(i).findElement(By.cssSelector(".cart_unit span.old-price"));
+
+                pDisountPercent = Integer.parseInt(eleDiscountPercent.getText().replace("%", "").trim());
+                pOldPrice = Double.parseDouble(eleOldPrice.getText().replace("$", "").trim());
+                System.out.println("pDisountPercent" + pDisountPercent);
+                System.out.println("pOldPrice" + pOldPrice);
+
+            } catch (Exception ex) {
+                //System.out.println("pagePayment.getSelectedProduct() Err: " + ex.getMessage());
+                elePrice = selectedProductRows.get(i).findElement(By.cssSelector(".cart_unit span.price"));
+            }
+
+            String pName = eleName.getText().trim();
+            String pAttribute[] = eleAttribute.getText().replace("Color : ", "").replace(" Size : ", "").split(",");
+            String pColor = pAttribute[0].trim();
+            String pSize = pAttribute[1].trim();
+            int pQuantity = Integer.parseInt(eleQuantity.getText().trim());
+            double pPrice = Double.parseDouble(elePrice.getText().replace("$", "").trim());
+
+            if (pOldPrice != 0.00 && pDisountPercent != 0)
+                actualSelectedProduct.add(new Product(pName, pColor, pSize, pQuantity, pPrice, pDisountPercent, pOldPrice));
+            actualSelectedProduct.add(new Product(pName, pColor, pSize, pQuantity, pPrice));
         }
-
-        String pName = eleName.getText().trim();
-        String pAttribute[] = eleAttribute.getText().replace("Color : ", "").replace(" Size : ", "").split(",");
-        String pColor = pAttribute[0].trim();
-        String pSize = pAttribute[1].trim();
-        int pQuantity = Integer.parseInt(eleQuantity.getText().trim());
-        double pPrice = Double.parseDouble(elePrice.getText().replace("$", "").trim());
-
-        if(pOldPrice != 0.00 && pDisountPercent != 0)
-            return new Product(pName, pColor, pSize, pQuantity, pPrice, pDisountPercent, pOldPrice);
-        return new Product(pName, pColor, pSize, pQuantity, pPrice);
+        return actualSelectedProduct;
     }
 }

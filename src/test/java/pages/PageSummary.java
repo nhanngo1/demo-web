@@ -1,10 +1,14 @@
 package pages;
 
+import model.Product;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import model.Cart;
+import org.testng.Assert;
+import static utils.TestReport.testReport;
 
 import java.util.List;
 
@@ -37,5 +41,27 @@ public class PageSummary extends PageBase{
         try {Thread.sleep(500); } catch (Exception ex) {};
         super.scrollToElement(driver, this.proceedToCheckout);
         this.proceedToCheckout.click();
+    }
+
+    public int verifyAmount(Cart cart){
+        double expectedPrice = 0;
+        String log = "";
+        boolean result = true;
+        for (Product prod : cart.products) {
+            expectedPrice += prod.price * prod.quantity;
+            System.out.println(prod.toString());
+        }
+        expectedPrice = Math.round(expectedPrice * 100);
+        expectedPrice = expectedPrice/100;
+
+        double actualPrice = this.getTotalProductPrice();
+
+        log = String.format("Expect: %02f.<br>Actual: %2f.", expectedPrice, actualPrice);
+        result = expectedPrice == actualPrice;
+        testReport(driver, result, log, true);
+
+        if (result == true)
+            return 1;
+        return 0;
     }
 }

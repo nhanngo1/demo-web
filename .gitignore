@@ -3,4 +3,8 @@
 target
 report
 automationtestdemo.iml
+<<<<<<< HEAD
 .DS_Store
+=======
+test-output
+>>>>>>> cfe637c540451bb64ee79dce16bc3c2977902319
