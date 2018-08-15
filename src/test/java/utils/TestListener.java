@@ -5,6 +5,7 @@ import com.relevantcodes.extentreports.NetworkMode;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
+import org.testng.annotations.Parameters;
 
 import java.io.File;
 
@@ -19,19 +20,19 @@ public class TestListener implements ITestListener {
 
     public void onStart(ITestContext iTestContext) {
         System.out.println("Start tests");
-
+        String browser = iTestContext.getCurrentXmlTest().getAllParameters().get("browser");
         // create html report
         if (utils.TestReport.extentTest == null) {
             String workingDir = System.getProperty("user.dir");
             System.out.println("workingDir" + workingDir);
-            extentReports = new ExtentReports(workingDir + "/report/AutomationTestReport.html", true, NetworkMode.OFFLINE);
+            extentReports = new ExtentReports(workingDir + "/report/AutomationTestReport_" + browser + ".html", true, NetworkMode.OFFLINE);
         }
     }
-
 
     public void onTestStart(ITestResult iTestResult) {
         System.out.println("Start test method: " + iTestResult.getName());
         TestReport.extentTest = extentReports.startTest(iTestResult.getName());
+
     }
 
     public void onFinish(ITestContext iTestContext) {
