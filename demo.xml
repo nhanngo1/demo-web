@@ -6,6 +6,7 @@
     </listeners>
 
     <test name="place-order">
+        <parameter name="browser" value="chrome" />
         <classes>
             <class name="tests.PlaceOrderTest"/>
         </classes>

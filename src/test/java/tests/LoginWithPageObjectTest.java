@@ -11,7 +11,7 @@ public class LoginWithPageObjectTest extends TestBase {
 
     @Test
     public void loginSuccessfullyUsingPOM() {
-        int result = 1;
+        boolean result = true;
         Dotenv dotenv = Dotenv.configure().directory("./").load();
 
         String email = dotenv.get("EMAIL");
@@ -22,8 +22,8 @@ public class LoginWithPageObjectTest extends TestBase {
         PageLogin pageLogin = pageHome.ClickSignInButton();
 
         PageMyAccount pageMyAccount = pageLogin.signIn(email, pwd);
-        result *= pageMyAccount.verifyUserName(accountName);
+        result &= pageMyAccount.verifyUserName(accountName);
 
-        Assert.assertEquals(result, 1);
+        Assert.assertTrue(result);
     }
 }

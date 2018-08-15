@@ -33,15 +33,13 @@ public class PageMyAccount extends PageBase{
         return new PageHome(this.driver);
     }
 
-    public int verifyUserName(String expectedName) {
+    public boolean verifyUserName(String expectedName) {
         String actualName = lblUserName.getText();
         String log = String.format("Expect: name is \"%s\".<br>Actual: name is \"%s\"", expectedName, actualName);
 
         boolean result = actualName.equals(expectedName);
         testReport(driver, result, log, true);
 
-        if (result == true)
-            return 1;
-        return 0;
+        return result;
     }
 }

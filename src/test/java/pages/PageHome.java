@@ -83,6 +83,8 @@ public class PageHome extends PageBase {
             pDisountPercent = Integer.parseInt(eleDiscountPercent.getText().replace("%", "").trim());
         } catch (Exception ex){}
 
+        scrollToElement(driver, products.get(selectedProdIndex));
+
         // Click add to cart button
         Actions action = new Actions(driver);
         action.moveToElement(products.get(selectedProdIndex));

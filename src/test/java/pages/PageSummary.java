@@ -25,6 +25,9 @@ public class PageSummary extends PageBase{
     @FindBy(linkText = "Proceed to checkout")
     public WebElement proceedToCheckout;
 
+    @FindBy(id = "cart_title")
+    WebElement txtCartTitle;
+
     public PageSummary(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -43,10 +46,13 @@ public class PageSummary extends PageBase{
         this.proceedToCheckout.click();
     }
 
-    public int verifyAmount(Cart cart){
+    public boolean verifyAmount(Cart cart){
+
         double expectedPrice = 0;
         String log = "";
         boolean result = true;
+
+        scrollToElement(driver, lblPageName);
         for (Product prod : cart.products) {
             expectedPrice += prod.price * prod.quantity;
             System.out.println(prod.toString());
@@ -56,12 +62,10 @@ public class PageSummary extends PageBase{
 
         double actualPrice = this.getTotalProductPrice();
 
-        log = String.format("Expect: %02f.<br>Actual: %2f.", expectedPrice, actualPrice);
+        log = String.format("Expect: %.2f.<br>Actual: %.2f.", expectedPrice, actualPrice);
         result = expectedPrice == actualPrice;
         testReport(driver, result, log, true);
 
-        if (result == true)
-            return 1;
-        return 0;
+        return result;
     }
 }

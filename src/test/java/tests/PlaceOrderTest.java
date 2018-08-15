@@ -8,59 +8,58 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.*;
 
-public class PlaceOrderTest extends TestBase{
+import static org.testng.Assert.assertEquals;
+import static utils.TestReport.handleExceptionAndMarkFailResult;
+
+public class PlaceOrderTest extends TestBase {
 
     @Test
     public void buyRandomProducts() {
 
-        Dotenv dotenv = Dotenv.configure().directory("./").load();
+        boolean testResult = true;
+        try {
+            Dotenv dotenv = Dotenv.configure().directory("./").load();
 
-        String email = dotenv.get("EMAIL");
-        String pwd = dotenv.get("PASSWORD");
-        Cart cart = new Cart();
-        int result = 1;
+            String email = dotenv.get("EMAIL");
+            String pwd = dotenv.get("PASSWORD");
+            Cart cart = new Cart();
 
-        PageHome pageHome = new PageHome(driver);
-        PageLogin pageLogin = pageHome.ClickSignInButton();
+            PageHome pageHome = new PageHome(driver);
+            PageLogin pageLogin = pageHome.ClickSignInButton();
 
-        PageMyAccount pageMyAccount = pageLogin.signIn(email, pwd);
-        pageHome = pageMyAccount.clickHomeIcon();
+            PageMyAccount pageMyAccount = pageLogin.signIn(email, pwd);
+            pageHome = pageMyAccount.clickHomeIcon();
 
-        pageHome.addARandomProductToCart(cart);
-        pageHome.selectContinueShopping();
-        pageHome.addARandomProductToCart(cart);
-        PageSummary pageSummary = pageHome.selectProceedToCheckOut();
+            pageHome.addARandomProductToCart(cart);
+            pageHome.selectContinueShopping();
+            pageHome.addARandomProductToCart(cart);
+            PageSummary pageSummary = pageHome.selectProceedToCheckOut();
 
-//        double expectedPrice = 0;
-//        for (Product prod : cart.products) {
-//            expectedPrice += prod.price * prod.quantity;
-//            System.out.println(prod.toString());
-//        }
-//        expectedPrice = Math.round(expectedPrice * 100);
-//        expectedPrice = expectedPrice/100;
-//
-//        double actualPrice = pageSummary.getTotalProductPrice();
-//        Assert.assertEquals(actualPrice, expectedPrice);
-        result *= pageSummary.verifyAmount(cart);
-        pageSummary.clickProceedToCheckout(driver);
+            testResult &= pageSummary.verifyAmount(cart);
+            pageSummary.clickProceedToCheckout(driver);
 
-        System.out.println("navigating to page address");
-        PageAddress pageAddress = new PageAddress(driver);
-        pageAddress.checkToUseDeliveryAddressAsBillingAddress();
-        pageAddress.clickProceedToCheckout(driver);
+            System.out.println("navigating to page address");
+            PageAddress pageAddress = new PageAddress(driver);
+            pageAddress.checkToUseDeliveryAddressAsBillingAddress();
+            pageAddress.clickProceedToCheckout(driver);
 
-        PageShipping pageShipping = new PageShipping(driver);
-        pageShipping.checkToAgreeTermsAndCondition();
-        pageShipping.clickProceedToCheckout(driver);
+            PageShipping pageShipping = new PageShipping(driver);
+            pageShipping.checkToAgreeTermsAndCondition();
+            pageShipping.clickProceedToCheckout(driver);
 
-        PagePayment pagePayment = new PagePayment(driver);
-        //result *= pagePayment.verifyCartSummary(cart);
-        double totalPrice = pagePayment.getTotalPrice();
-        pagePayment.selectPayByCheck();
-        result *= pagePayment.verifyAmount(totalPrice);
-        pagePayment.confirmOrder();
-        pagePayment.verifyOrderPalcedSuccess();
+            PagePayment pagePayment = new PagePayment(driver);
+            //testResult &= pagePayment.verifyCartSummary(cart);
+            double totalPrice = pagePayment.getTotalPrice();
+            pagePayment.selectPayByCheck();
+            testResult &= pagePayment.verifyAmount(totalPrice);
+            pagePayment.confirmOrder();
+            testResult &= pagePayment.verifyOrderPalcedSuccess();
 
-        Assert.assertEquals(result, 1);
+        } catch (Exception ex) {
+            testResult = false;
+            handleExceptionAndMarkFailResult(driver, ex);
+        } finally {
+            assertEquals(testResult, true);
+        }
     }
 }

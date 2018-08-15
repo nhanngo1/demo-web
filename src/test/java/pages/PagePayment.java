@@ -58,30 +58,29 @@ public class PagePayment extends PageBase {
         return this;
     }
 
-    public int verifyOrderPalcedSuccess(){
+    public boolean verifyOrderPalcedSuccess(){
 
-        String log = String.format("Expect the message ");
+        scrollToElement(driver, lblPageName);
         try {
             testReport(driver, true, "The message \"Your order on My Store is complete.\" is displayed", true);
-            return 1;
+            return true;
         } catch (Exception ex){
             testReport(driver, false, "The message \"Your order on My Store is complete.\" is not displayed", true);
-            return 0;
+            return false;
         }
     }
 
-    public int verifyAmount(double expectedAmount){
+    public boolean verifyAmount(double expectedAmount){
         double actualAmount  = Double.parseDouble(lblAmount.getText().replace("$", "").trim());
-        String log = String.format("Expect: amount is %.2f.<br>Actual: amount is .2%f", expectedAmount, actualAmount);
+        String log = String.format("Expect: amount is %.2f.<br>Actual: amount is %.2f.", expectedAmount, actualAmount);
         boolean result = actualAmount == expectedAmount;
+        scrollToElement(driver, lblPageName);
         testReport(driver, result, log, true);
 
-        if(result == true)
-            return 1;
-        return 0;
+        return result;
     }
 
-    public int verifyCartSummary(Cart cart) {
+    public boolean verifyCartSummary(Cart cart) {
         int totalProduct = 0;
         List<Product> actualSelectedProduct = new ArrayList<Product>();
 
@@ -129,10 +128,8 @@ public class PagePayment extends PageBase {
         result = count == expectedSelectedProductSize;
         testReport(driver, result, log, true);
 
-        if (result == true)
-            return 1;
-        return 0;
-        //}
+        return result;
+
     }
 
 
