@@ -5,6 +5,8 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import com.aventstack.extentreports.reporter.configuration.ChartLocation;
+import com.aventstack.extentreports.reporter.configuration.Theme;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
@@ -35,9 +37,14 @@ public class TestListener implements ITestListener {
 
     public void onStart(ITestContext iTestContext) {
         if (reporter == null) {
-            String reportFullPath = System.getProperty("user.dir") + "/report/AutomationTest.html";
+            String reportFullPath = System.getProperty("user.dir") + "/report/AutomationTestReport.html";
             System.out.println("create report: " + reportFullPath);
             reporter = new ExtentHtmlReporter(reportFullPath);
+            reporter.config().setChartVisibilityOnOpen(true);
+//            reporter.config().setTheme(Theme.DARK);
+            reporter.config().setDocumentTitle("Automation Test Report");
+            reporter.config().setEncoding("utf-8");
+
             extent = new ExtentReports();
             extent.attachReporter(reporter);
         }
