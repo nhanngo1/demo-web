@@ -7,10 +7,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.apache.commons.collections4.CollectionUtils;
-
-//import static utils.TestReport.testReport;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +71,7 @@ public class PagePayment extends PageBase {
 
     public boolean verifyAmount(double expectedAmount) throws IOException {
         double actualAmount  = Double.parseDouble(lblAmount.getText().replace("$", "").trim());
-        String log = String.format("Expect: amount is %.2f.<br>Actual: amount is %.2f.", expectedAmount, actualAmount);
+        String log = String.format("Total amount.<br>Expect: amount is %.2f.<br>Actual: amount is %.2f.", expectedAmount, actualAmount);
         boolean result = actualAmount == expectedAmount;
         scrollToElement(driver, lblPageName);
         testReport(driver, result, log, true);
@@ -89,28 +85,15 @@ public class PagePayment extends PageBase {
 
         WebElement cartSummary = tblCartSummary.findElement(By.cssSelector("tbody"));
         List<WebElement> selectedProductRows = cartSummary.findElements(By.cssSelector("tr"));
-        //totalProduct = selectedProductRows.size();
 
         this.scrollToElement(driver, tblCartSummary);
         actualSelectedProduct = getSelectedProducts();
-//        for (int i = 0; i < totalProduct; i++) {
-//            actualSelectedProduct.add(getSelectedProduct(selectedProductRows.get(i)));
-//        }
-//        System.out.println(actualSelectedProduct.toString());
-//        System.out.println(cart.products.toString());
-//        System.out.println(CollectionUtils.isEqualCollection(actualSelectedProduct, cart.products));
-
         int actualSelectedProductSize = actualSelectedProduct.size();
         int expectedSelectedProductSize = cart.products.size();
 
         String log = "";
 
         boolean result = actualSelectedProductSize == expectedSelectedProductSize;
-//        if (result == false) {
-//            log = String.format("Expected: %d products are selected.<br>Actual: %d products are selected", actualSelectedProduct.size(), cart.products.size());
-//            testReport(driver, false, log, true);
-//            return 0;
-//        } else {
         int count = 0;
         boolean stepResult = true;
         for (int i = 0; i < expectedSelectedProductSize; i++) {

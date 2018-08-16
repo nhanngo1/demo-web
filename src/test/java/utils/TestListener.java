@@ -34,11 +34,13 @@ public class TestListener implements ITestListener {
     }
 
     public void onStart(ITestContext iTestContext) {
-        System.out.println("create report" + System.getProperty("user.dir") + "/report/test.html");
-        reporter = new ExtentHtmlReporter(System.getProperty("user.dir") + "/report/test.html");
-        extent = new ExtentReports();
-        extent.attachReporter(reporter);
-
+        if (reporter == null) {
+            String reportFullPath = System.getProperty("user.dir") + "/report/AutomationTest.html";
+            System.out.println("create report: " + reportFullPath);
+            reporter = new ExtentHtmlReporter(reportFullPath);
+            extent = new ExtentReports();
+            extent.attachReporter(reporter);
+        }
     }
 
     public static ExtentTest getLogger() {
@@ -48,7 +50,21 @@ public class TestListener implements ITestListener {
     // Create logger
     public void onTestStart(ITestResult iTestResult) {
         System.out.println(String.format("Start test method: %s - %s", iTestResult.getName(), "create logger."));
-        logger = extent.createTest(iTestResult.getName());
+        String reportTestName = iTestResult.getName();
+        String browser;
+
+        try {
+            browser = iTestResult.getTestContext().getCurrentXmlTest().getParameter("browser");
+            if(browser.isEmpty()){
+                browser = "chrome";
+            }
+        } catch (Exception ex){
+            browser = "chrome";
+        }
+
+        reportTestName = reportTestName + "_" + browser;
+
+        logger = extent.createTest(reportTestName);
         extentLoggerMap.put((int) (long) (Thread.currentThread().getId()), logger);
     }
 
@@ -77,8 +93,6 @@ public class TestListener implements ITestListener {
         String screeshotPath = "";
         if (isCaptureScreenshot) {
             screeshotPath = getScreenshotPath(captureScreenshot(driver));
-            passMessage += screeshotPath;
-            failMessage += screeshotPath;
         }
 
         if (isPassed) {
@@ -121,7 +135,7 @@ public class TestListener implements ITestListener {
             testReport(driver, Status.FAIL, exception.getMessage() + "<br>StackTrace: " + sStackTrace.replace("\n", "<br>"), true);
             System.out.println("Exception: " + exception.getMessage());
             fail();
-        } catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }

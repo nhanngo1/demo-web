@@ -1,15 +1,11 @@
 package pages;
 
 import model.Product;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import model.Cart;
-import org.testng.Assert;
-//import static utils.TestReport.testReport;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -65,7 +61,7 @@ public class PageSummary extends PageBase{
 
         double actualPrice = this.getTotalProductPrice();
 
-        log = String.format("Expect: %.2f.<br>Actual: %.2f.", expectedPrice, actualPrice);
+        log = String.format("Amount without shipping fee.<br>Expect: %.2f.<br>Actual: %.2f.", expectedPrice, actualPrice);
         result = expectedPrice == actualPrice;
         testReport(driver, result, log, true);
 

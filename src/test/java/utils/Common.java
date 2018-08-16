@@ -31,7 +31,7 @@ public class Common {
         String fileName = "";
         try {
 
-            fileName = "./"+generateUniqueString() + ".png";
+            fileName = "./" + generateUniqueString() + ".png";
             File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(scrFile, new File(fileName));
         } catch (Exception e) {
@@ -42,7 +42,8 @@ public class Common {
     }
 
     public static String generateUniqueString() {
-        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss").format(Calendar.getInstance().getTime());
+        String timeStamp = new SimpleDateFormat("ddMMyyyy_HHmmss_SSS").format(Calendar.getInstance().getTimeInMillis());
+
         return timeStamp;
     }
 }

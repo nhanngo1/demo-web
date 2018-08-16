@@ -2,15 +2,11 @@ package tests;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import model.Cart;
-import model.Product;
-import org.openqa.selenium.By;
-import org.testng.Assert;
 import org.testng.annotations.*;
 import pages.*;
 
 import static org.testng.Assert.assertEquals;
 import static utils.TestListener.handleExceptionAndMarkFailResult;
-//import static utils.TestReport.handleExceptionAndMarkFailResult;
 
 public class PlaceOrderTest extends TestBase {
 
@@ -49,7 +45,6 @@ public class PlaceOrderTest extends TestBase {
             pageShipping.clickProceedToCheckout(driver);
 
             PagePayment pagePayment = new PagePayment(driver);
-            //testResult &= pagePayment.verifyCartSummary(cart);
             double totalPrice = pagePayment.getTotalPrice();
             pagePayment.selectPayByCheck();
             testResult &= pagePayment.verifyAmount(totalPrice);

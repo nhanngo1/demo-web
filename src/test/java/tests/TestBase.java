@@ -17,8 +17,8 @@ public class TestBase {
 
     @Parameters("browser")
     @BeforeMethod
-    public void testMethodInit(String browser) {
-		System.out.println(String.format("Browser %s", browser));
+    public void testMethodInit(@Optional("chrome") String browser) {
+        System.out.println(String.format("Open browser: %s", browser));
         this.launchBrowser(browser);
     }
 
@@ -37,7 +37,7 @@ public class TestBase {
             try {
                 DesiredCapabilities capabilities;
 
-                switch (browser) {
+                switch (browser.toLowerCase()) {
                     case "ff":
                     case "firefox": {
                         capabilities = DesiredCapabilities.firefox();
@@ -53,10 +53,10 @@ public class TestBase {
                 String hubPort = dotenv.get("HUB_PORT");
                 System.out.println(String.format("%s:%s", hubUrl, hubPort));
                 driver = new RemoteWebDriver(new URL("http://" + hubUrl + ":" + hubPort + "/wd/hub"), capabilities);
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
         } else {
-            System.out.println(browser);
-            switch (browser) {
+            switch (browser.toLowerCase()) {
                 case "ff":
                 case "firefox": {
                     driver = new FirefoxDriver();
