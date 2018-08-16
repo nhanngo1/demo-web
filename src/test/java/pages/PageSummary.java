@@ -8,9 +8,12 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import model.Cart;
 import org.testng.Assert;
-import static utils.TestReport.testReport;
+//import static utils.TestReport.testReport;
 
+import java.io.IOException;
 import java.util.List;
+
+import static utils.TestListener.testReport;
 
 public class PageSummary extends PageBase{
 
@@ -46,7 +49,7 @@ public class PageSummary extends PageBase{
         this.proceedToCheckout.click();
     }
 
-    public boolean verifyAmount(Cart cart){
+    public boolean verifyAmount(Cart cart) throws IOException {
 
         double expectedPrice = 0;
         String log = "";

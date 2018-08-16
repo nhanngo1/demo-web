@@ -5,7 +5,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import static utils.TestReport.testReport;
+import java.io.IOException;
+
+import static utils.TestListener.testReport;
+
+//import static utils.TestReport.testReport;
 
 public class PageMyAccount extends PageBase{
 
@@ -33,7 +37,7 @@ public class PageMyAccount extends PageBase{
         return new PageHome(this.driver);
     }
 
-    public boolean verifyUserName(String expectedName) {
+    public boolean verifyUserName(String expectedName) throws IOException{
         String actualName = lblUserName.getText();
         String log = String.format("Expect: name is \"%s\".<br>Actual: name is \"%s\"", expectedName, actualName);
 

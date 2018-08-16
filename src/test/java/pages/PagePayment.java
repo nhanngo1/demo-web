@@ -9,10 +9,13 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.apache.commons.collections4.CollectionUtils;
 
-import static utils.TestReport.testReport;
+//import static utils.TestReport.testReport;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static utils.TestListener.testReport;
 
 public class PagePayment extends PageBase {
     private WebDriver driver;
@@ -58,7 +61,7 @@ public class PagePayment extends PageBase {
         return this;
     }
 
-    public boolean verifyOrderPalcedSuccess(){
+    public boolean verifyOrderPalcedSuccess() throws IOException {
 
         scrollToElement(driver, lblPageName);
         try {
@@ -70,7 +73,7 @@ public class PagePayment extends PageBase {
         }
     }
 
-    public boolean verifyAmount(double expectedAmount){
+    public boolean verifyAmount(double expectedAmount) throws IOException {
         double actualAmount  = Double.parseDouble(lblAmount.getText().replace("$", "").trim());
         String log = String.format("Expect: amount is %.2f.<br>Actual: amount is %.2f.", expectedAmount, actualAmount);
         boolean result = actualAmount == expectedAmount;
@@ -80,7 +83,7 @@ public class PagePayment extends PageBase {
         return result;
     }
 
-    public boolean verifyCartSummary(Cart cart) {
+    public boolean verifyCartSummary(Cart cart) throws IOException {
         int totalProduct = 0;
         List<Product> actualSelectedProduct = new ArrayList<Product>();
 
