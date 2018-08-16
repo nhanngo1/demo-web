@@ -18,6 +18,7 @@ public class TestBase {
     @Parameters("browser")
     @BeforeMethod
     public void testMethodInit(String browser) {
+		System.out.println(String.format("Browser %s", browser));
         this.launchBrowser(browser);
     }
 
@@ -70,4 +71,3 @@ public class TestBase {
         driver.get(url);
     }
 }
-

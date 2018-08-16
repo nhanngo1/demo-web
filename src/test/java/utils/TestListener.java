@@ -57,6 +57,3 @@ public class TestListener implements ITestListener {
         System.out.println("Test failed but it is in defined success ratio: " + iTestResult.getName());
     }
 }
-
-
-
